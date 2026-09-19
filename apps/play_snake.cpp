@@ -1,3 +1,7 @@
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                //
-// Created by riyan on 9/15/26.
-//
+#include <iostream>
+using namespace std;
+int main()
+{
+    cout<<"play_snake"<<endl;
+    return 0;
+}
