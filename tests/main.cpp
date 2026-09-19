@@ -1,3 +1,7 @@
-//
-// Created by riyan on 9/19/26.
-//
+#include <iostream>
+using namespace std;
+int main()
+{
+    cout<<"les test"<<endl;
+    return 0;
+}
