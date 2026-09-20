@@ -1,8 +1,7 @@
-//
-// Created by riyan on 9/15/26.
-//
-
 #ifndef RESEAU_DE_NEURONES_FROM_SCRATCH_C_TYPES_HPP
 #define RESEAU_DE_NEURONES_FROM_SCRATCH_C_TYPES_HPP
+
+using Scalar = double;
+using Index = int;
 
 #endif //RESEAU_DE_NEURONES_FROM_SCRATCH_C_TYPES_HPP
