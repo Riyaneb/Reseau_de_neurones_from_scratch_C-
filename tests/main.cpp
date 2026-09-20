@@ -1,7 +1,13 @@
-#include <iostream>
-using namespace std;
+#include "TestRunner.hpp"
+#include "math/Matrix.hpp"
+
+void test_indexation(TestRunner &runner, Matrix &matrix);
+void test_matrice(TestRunner& runner);
+
 int main()
 {
-    cout<<"les test"<<endl;
-    return 0;
+    TestRunner runner;
+    test_matrice(runner);
+    runner.bilan();
+    return runner.return_test();
 }

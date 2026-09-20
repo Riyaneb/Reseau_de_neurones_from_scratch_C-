@@ -1,4 +1,5 @@
 #include "math/Matrix.hpp"
+#include <cassert>
 
 Index Matrix::check_size(Index l, Index c) {
     assert(l > 0 && c >0 && "Le nombre de ligne ou de colonne de la matrice est négatif ou nulle");

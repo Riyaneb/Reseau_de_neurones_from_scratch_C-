@@ -3,7 +3,6 @@
 
 #include "math/Types.hpp"
 #include <vector>
-#include <cassert>
 
 class Matrix {
 public:

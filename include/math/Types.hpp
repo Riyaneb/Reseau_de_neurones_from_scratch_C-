@@ -1,5 +1,6 @@
 #ifndef RESEAU_DE_NEURONES_FROM_SCRATCH_C_TYPES_HPP
 #define RESEAU_DE_NEURONES_FROM_SCRATCH_C_TYPES_HPP
+#include <string>
 
 using Scalar = double;
 using Index = int;
