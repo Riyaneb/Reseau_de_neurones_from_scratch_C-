@@ -57,6 +57,11 @@ target_link_libraries(train_xor PRIVATE libNeurone)
 target_compile_features(train_xor PRIVATE cxx_std_17)
 set_target_properties(train_xor PROPERTIES CXX_EXTENSIONS OFF)
 
+add_executable(benchmark_matrix apps/benchmark_matrix.cpp)
+target_link_libraries(benchmark_matrix PRIVATE libNeurone)
+target_compile_features(benchmark_matrix PRIVATE cxx_std_17)
+set_target_properties(benchmark_matrix PROPERTIES CXX_EXTENSIONS OFF)
+
 add_executable(test_module ${TEST})
 target_include_directories(test_module PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests)
 target_link_libraries(test_module PRIVATE libNeurone)

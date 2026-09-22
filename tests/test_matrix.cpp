@@ -216,6 +216,103 @@ void test_sum_axes(TestRunner &runner) {
     comparaison_matrix(runner, A,copieA,"Test intégrité somme des lignes");
 }
 
+
+void test_produit_matricielle(TestRunner &runner) {
+    Matrix A(2, 3);
+    A.get_value(0, 0) = 1;
+    A.get_value(0, 1) = 2;
+    A.get_value(0, 2) = 3;
+    A.get_value(1, 0) = 4;
+    A.get_value(1, 1) = 5;
+    A.get_value(1, 2) = 6;
+
+
+    Matrix B(3, 2);
+    B.get_value(0, 0) = 7;
+    B.get_value(0, 1) = 8;
+    B.get_value(1, 0) = 9;
+    B.get_value(1, 1) = 10;
+    B.get_value(2, 0) = 11;
+    B.get_value(2, 1) = 12;
+
+
+    Matrix expected1(2, 2);
+    expected1.get_value(0, 0) = 58;
+    expected1.get_value(0, 1) = 64;
+    expected1.get_value(1, 0) = 139;
+    expected1.get_value(1, 1) = 154;
+
+    Matrix expected2(3, 3);
+    expected2.get_value(0, 0) = 39;
+    expected2.get_value(0, 1) = 54;
+    expected2.get_value(0, 2) = 69;
+    expected2.get_value(1, 0) = 49;
+    expected2.get_value(1, 1) = 68;
+    expected2.get_value(1, 2) = 87;
+    expected2.get_value(2, 0) = 59;
+    expected2.get_value(2, 1) = 82;
+    expected2.get_value(2, 2) = 105;
+
+    Matrix copieA(A);
+    Matrix copieB(B);
+
+    comparaison_matrix(runner, A*B,expected1,"Test produit matricielle AxB");
+    comparaison_matrix(runner, A,copieA,"Test intégrité produit matricielle AxB de A");
+    comparaison_matrix(runner, B,copieB,"Test intégrité produit matricielle AxB de B");
+    comparaison_matrix(runner, B*A,expected2,"Test produit matricielle BxA");
+    comparaison_matrix(runner, A,copieA,"Test intégrité produit matricielle BxA de A");
+    comparaison_matrix(runner, B,copieB,"Test intégrité produit matricielle BxA de B");
+}
+
+void test_identity(TestRunner &runner) {
+    Matrix A(3,2);
+    Matrix ID2x2(Matrix::matIdentity(2));
+    Matrix ID3x3(Matrix::matIdentity(3));
+
+    for (Index i = 0; i < A.get_row(); i++) {
+        for (Index j = 0; j < A.get_column(); j++) {
+            A.get_value(i,j) = 10*i + j;
+        }
+    }
+
+    Matrix copieA(A);
+
+    comparaison_matrix(runner, A*ID2x2,copieA,"Test produit matricielle AxId");
+    comparaison_matrix(runner, A,copieA,"Test intégrité produit matricielle AxId de A");
+    comparaison_matrix(runner, ID3x3*A,copieA,"Test produit matricielle IdxA");
+    comparaison_matrix(runner, A,copieA,"Test intégrité produit matricielle IdxA de A");
+}
+
+void test_transpose_produit(TestRunner &runner) {
+    Matrix A(2, 3);
+    A.get_value(0, 0) = 1;
+    A.get_value(0, 1) = 2;
+    A.get_value(0, 2) = 3;
+    A.get_value(1, 0) = 4;
+    A.get_value(1, 1) = 5;
+    A.get_value(1, 2) = 6;
+
+    Matrix B(3, 2);
+    B.get_value(0, 0) = 7;
+    B.get_value(0, 1) = 8;
+    B.get_value(1, 0) = 9;
+    B.get_value(1, 1) = 10;
+    B.get_value(2, 0) = 11;
+    B.get_value(2, 1) = 12;
+
+    Matrix copieA(A);
+    Matrix copieB(B);
+
+    Matrix left = (A * B).transpose();
+
+    Matrix right = B.transpose() * A.transpose();
+
+    comparaison_matrix(runner, left, right, "Test (AxB)^T = B^TxA^T");
+
+    comparaison_matrix(runner, A, copieA, "Test intégrité propriete de A");
+    comparaison_matrix(runner, B, copieB, "Test intégrité propriete de B");
+}
+
 void test_matrice(TestRunner& runner) {
     Scalar const n1 = 7.0;
     Matrix matriceA(3,2,n1);
@@ -254,6 +351,15 @@ void test_matrice(TestRunner& runner) {
 
     runner.section("Test somme des lignes");
     test_sum_axes(runner);
+
+    runner.section("Test produit matricielle");
+    test_produit_matricielle(runner);
+
+    runner.section("Test produit matricielle avec matrice identité");
+    test_identity(runner);
+
+    runner.section("Test propriété transposé");
+    test_transpose_produit(runner);
 }
 
 

@@ -19,6 +19,7 @@ public:
     Matrix transpose() const;
     Matrix& broadcast(Matrix const &m);
     Matrix sum_row() const;
+    static Matrix matIdentity(Index i);
 
 private:
     static Index check_size(Index l, Index c);
@@ -34,5 +35,6 @@ Matrix hadamard(Matrix const &m1, Matrix const &m2);
 Matrix operator*(Matrix const &m1, Scalar a);
 Matrix operator*(Scalar a, Matrix const &m1);
 Matrix broadcast(Matrix const &m, Matrix const &biais);
+Matrix operator*(Matrix const &m1, Matrix const &m2);
 
 #endif //RESEAU_DE_NEURONES_FROM_SCRATCH_C_MATRIX_HPP

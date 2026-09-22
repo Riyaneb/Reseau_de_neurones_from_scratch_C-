@@ -128,3 +128,26 @@ Matrix Matrix::sum_row() const {
     }
     return result;
 }
+
+Matrix operator*(Matrix const &m1, Matrix const &m2) {
+    assert(m1.get_column() == m2.get_row() && "Erreur : Dimension incorrecte pour la multiplication matricielle");
+    Matrix result(m1.get_row(),m2.get_column(),0);
+
+    for (Index i = 0; i < m1.get_row(); ++i) {
+        for (Index j = 0; j < m2.get_column(); ++j) {
+            for (Index k = 0; k < m1.get_column(); ++k) {
+                result.get_value(i,j) += m1.get_value(i,k) * m2.get_value(k,j);
+            }
+        }
+    }
+    return result;
+}
+
+
+Matrix Matrix::matIdentity(Index n) {
+    Matrix result(n,n,0);
+    for (Index j=0;j<n;j++) {
+        result.get_value(j,j) = 1.0;
+    }
+    return result;
+}
