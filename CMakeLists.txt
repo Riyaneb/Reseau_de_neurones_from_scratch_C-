@@ -37,6 +37,7 @@ set(TEST
         tests/test_replay_buffer.cpp
         tests/test_snake_env.cpp
         tests/test_xor.cpp
+        tests/test_random.cpp
 )
 
 add_library(libNeurone ${CORE_SOURCE})

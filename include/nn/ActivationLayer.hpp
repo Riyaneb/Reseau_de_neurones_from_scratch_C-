@@ -1,8 +1,19 @@
-//
-// Created by riyan on 9/15/26.
-//
-
 #ifndef RESEAU_DE_NEURONES_FROM_SCRATCH_C_ACTIVATIONLAYER_HPP
 #define RESEAU_DE_NEURONES_FROM_SCRATCH_C_ACTIVATIONLAYER_HPP
+
+#include "math/Matrix.hpp"
+#include "nn/Layer.hpp"
+
+class ActivationLayer : public Layer {
+public:
+    ActivationLayer(Index nb) : nbInput(nb), input(1,nb) {}
+    Matrix forward(Matrix const &in) override;
+    Index nInput() const override;
+    Index nOutput() const override;
+protected:
+    Index nbInput;
+    Matrix input;
+    virtual Scalar apply(Scalar value) const = 0;
+};
 
 #endif //RESEAU_DE_NEURONES_FROM_SCRATCH_C_ACTIVATIONLAYER_HPP

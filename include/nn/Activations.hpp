@@ -1,8 +1,35 @@
-//
-// Created by riyan on 9/15/26.
-//
-
 #ifndef RESEAU_DE_NEURONES_FROM_SCRATCH_C_ACTIVATIONS_HPP
 #define RESEAU_DE_NEURONES_FROM_SCRATCH_C_ACTIVATIONS_HPP
+
+#include "ActivationLayer.hpp"
+#include <cmath>
+
+class ReLU : public ActivationLayer {
+public:
+    ReLU(Index nb) : ActivationLayer(nb) {}
+protected:
+    Scalar apply(Scalar value) const override;
+};
+
+class Sigmoide : public ActivationLayer {
+public:
+    Sigmoide(Index nb) : ActivationLayer(nb) {}
+protected:
+    Scalar apply(Scalar value) const override;
+};
+
+class Tanh : public ActivationLayer {
+public:
+    Tanh(Index nb) : ActivationLayer(nb) {}
+protected:
+    Scalar apply(Scalar value) const override;
+};
+
+class Identity : public ActivationLayer {
+public:
+    Identity(Index nb) : ActivationLayer(nb) {}
+protected:
+    Scalar apply(Scalar value) const override;
+};
 
 #endif //RESEAU_DE_NEURONES_FROM_SCRATCH_C_ACTIVATIONS_HPP

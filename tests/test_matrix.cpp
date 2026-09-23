@@ -28,7 +28,7 @@ void comparaison_matrix(TestRunner &runner, Matrix const &result, Matrix const &
         matResultStr << std::endl;
     }
 
-    std::cout << "Matrice attendu :\n\n " << matExpectedStr.str() << "\n\nMatrice obtenu : \n\n" << matResultStr.str() << std::endl;
+    std::cout << "Matrice attendu :\n\n" << matExpectedStr.str() << "\n\nMatrice obtenu :\n\n" << matResultStr.str() << std::endl;
 }
 
 void test_indexation(TestRunner &runner, Matrix &matrix) {

@@ -1,3 +1,4 @@
-//
-// Created by riyan on 9/15/26.
-//
+#include "nn/Layer.hpp"
+
+Layer::~Layer() {
+}
