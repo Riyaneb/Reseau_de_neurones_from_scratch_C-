@@ -3,6 +3,9 @@
 #include "math/Random.hpp"
 #include "nn/DenseLayer.hpp"
 #include "nn/Activations.hpp"
+#include "nn/Network.hpp"
+#include <memory>
+
 
 void comparaison_matrix(TestRunner &runner, Matrix const &result, Matrix const &expected, std::string const &nom);
 
@@ -254,6 +257,120 @@ void test_enchainement(TestRunner &runner) {
 
 }
 
+void test_network(TestRunner &runner) {
+    runner.section("Construction du reseau XOR");
+
+    Random gen(42);
+    Network net;
+
+    net.add(std::make_unique<DenseLayer>(2, 4, gen));
+    net.add(std::make_unique<Tanh>(4));
+    net.add(std::make_unique<DenseLayer>(4, 1, gen));
+    net.add(std::make_unique<Sigmoide>(1));
+
+    runner.section("Test des dimensions de sortie 4x2");
+
+    Matrix input_xor_4x2(4, 2);
+    input_xor_4x2.get_value(0, 0) = 0;
+    input_xor_4x2.get_value(0, 1) = 0;
+    input_xor_4x2.get_value(1, 0) = 0;
+    input_xor_4x2.get_value(1, 1) = 1;
+    input_xor_4x2.get_value(2, 0) = 1;
+    input_xor_4x2.get_value(2, 1) = 0;
+    input_xor_4x2.get_value(3, 0) = 1;
+    input_xor_4x2.get_value(3, 1) = 1;
+
+    Matrix out_4x2 = net.prediction(input_xor_4x2);
+
+    runner.check_values(4, out_4x2.get_row(), "Lignes de la sortie pour entree 4x2");
+    runner.check_values(1, out_4x2.get_column(), "Colonnes de la sortie pour entree 4x2");
+
+    runner.section("Test des dimensions de sortie 1x2");
+
+    Matrix input_xor_1x2(1, 2);
+    input_xor_1x2.get_value(0, 0) = 1;
+    input_xor_1x2.get_value(0, 1) = 0;
+
+    Matrix out_1x2 = net.prediction(input_xor_1x2);
+
+    runner.check_values(1, out_1x2.get_row(), "Lignes de la sortie pour entree 1x2");
+    runner.check_values(1, out_1x2.get_column(), "Colonnes de la sortie pour entree 1x2");
+
+    runner.section("Test des bornes de la sortie (Sigmoide)");
+
+    bool bounds_ok = true;
+    for (Index i = 0; i < out_4x2.get_row(); ++i) {
+        for (Index j = 0; j < out_4x2.get_column(); ++j) {
+            if (out_4x2.get_value(i, j) <= 0.0 || out_4x2.get_value(i, j) >= 1.0) {
+                bounds_ok = false;
+            }
+        }
+    }
+    runner.check_values(true, bounds_ok, "Toutes les valeurs de sortie sont entre 0 et 1");
+
+    runner.section("Test de coherence (Enchainement manuel vs Reseau)");
+
+    Matrix input_coherence(1, 2);
+    input_coherence.get_value(0, 0) = 1;
+    input_coherence.get_value(0, 1) = -1;
+
+    Matrix weight1(2, 2);
+    weight1.get_value(0, 0) = 1;
+    weight1.get_value(0, 1) = 0.5;
+    weight1.get_value(1, 0) = -1;
+    weight1.get_value(1, 1) = 2;
+
+    Matrix biais1(1, 2);
+    biais1.get_value(0, 0) = 0.5;
+    biais1.get_value(0, 1) = -0.5;
+
+    Matrix weight2(2, 1);
+    weight2.get_value(0, 0) = 1;
+    weight2.get_value(1, 0) = -1;
+
+    Matrix biais2(1, 1);
+    biais2.get_value(0, 0) = 0.25;
+
+    // --- 1. Exécution Manuelle ---
+    DenseLayer dl1_man(2, 2, gen);
+    dl1_man.set_weight(weight1);
+    dl1_man.set_biais(biais1);
+
+    Tanh tanh_man(2);
+
+    DenseLayer dl2_man(2, 1, gen);
+    dl2_man.set_weight(weight2);
+    dl2_man.set_biais(biais2);
+
+    Sigmoide sig_man(1);
+
+    Matrix out_man_1 = dl1_man.forward(input_coherence);
+    Matrix out_man_2 = tanh_man.forward(out_man_1);
+    Matrix out_man_3 = dl2_man.forward(out_man_2);
+    Matrix expected_coh = sig_man.forward(out_man_3);
+
+    // --- 2. Exécution via le Réseau ---
+    Network net_coh;
+
+    auto ptr_dl1 = std::make_unique<DenseLayer>(2, 2, gen);
+    ptr_dl1->set_weight(weight1);
+    ptr_dl1->set_biais(biais1);
+    net_coh.add(std::move(ptr_dl1));
+
+    net_coh.add(std::make_unique<Tanh>(2));
+
+    auto ptr_dl2 = std::make_unique<DenseLayer>(2, 1, gen);
+    ptr_dl2->set_weight(weight2);
+    ptr_dl2->set_biais(biais2);
+    net_coh.add(std::move(ptr_dl2));
+
+    net_coh.add(std::make_unique<Sigmoide>(1));
+
+    Matrix out_net = net_coh.prediction(input_coherence);
+
+    // --- 3. Comparaison ---
+    comparaison_matrix(runner, out_net, expected_coh, "Coherence Reseau vs Manuel");
+}
 void test_layer(TestRunner& runner) {
 
     runner.section("Test de la classe DenseLayer");
@@ -265,4 +382,6 @@ void test_layer(TestRunner& runner) {
     runner.section("Test enchainement couche dense -> activation");
     test_enchainement(runner);
 
+    runner.section("Test Network");
+    test_network(runner);
 }

@@ -6,7 +6,7 @@
 class Layer {
 public:
     virtual Matrix forward(Matrix const &in) = 0;
-    virtual ~Layer();
+    virtual ~Layer() = default;
     virtual Index nInput() const = 0;
     virtual Index nOutput() const = 0;
 };
