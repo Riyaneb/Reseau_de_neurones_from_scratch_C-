@@ -359,6 +359,7 @@ void test_network(TestRunner &runner) {
 
     net_coh.add(std::make_unique<Tanh>(2));
 
+
     auto ptr_dl2 = std::make_unique<DenseLayer>(2, 1, gen);
     ptr_dl2->set_weight(weight2);
     ptr_dl2->set_biais(biais2);
