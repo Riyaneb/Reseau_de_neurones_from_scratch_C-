@@ -1,7 +1,7 @@
 #include "nn/DenseLayer.hpp"
 #include <cassert>
 
-DenseLayer::DenseLayer(Index nInput,Index nOutput, Random &gen, Index initChoice) : weight(Matrix(nInput,nOutput)), biais(Matrix(1,nOutput)), inNeural(Matrix(1,nInput)) {
+DenseLayer::DenseLayer(Index nInput,Index nOutput, Random &gen, Index initChoice) : weight(Matrix(nInput,nOutput)), biais(Matrix(1,nOutput)), inNeural(Matrix(1,nInput)), gradWeight(nInput,nOutput,0), gradBiais(1,nOutput,0) {
     assert((initChoice == 0 || initChoice == 1) && "Erreur : Valeur de initChoice incorrect (Glorot : 0 ; He : 1)");
     if (initChoice==0) {
         init_weight_Glorot(weight, gen);
@@ -26,6 +26,13 @@ Matrix DenseLayer::forward(Matrix const &in) {
     return result;
 }
 
+Matrix DenseLayer::backward(Matrix const &gradientOut) {
+    assert(gradientOut.get_column() == nOutput() && gradientOut.get_row() == inNeural.get_row() && "Erreur : Problème de dimension avec les gradient reçu des couches de sortie");
+    gradWeight = inNeural.transpose() * gradientOut;
+    gradBiais = gradientOut.sum_row();
+    return gradientOut * weight.transpose();
+}
+
 void DenseLayer::set_weight(Matrix const &w) {
     assert(weight.get_row() == w.get_row() && weight.get_column() == w.get_column() && "Erreur : Les matrices weight n'ont pas la même dimension");
     weight = w;
@@ -42,6 +49,14 @@ const Matrix& DenseLayer::get_weight() const{
 
 const Matrix& DenseLayer::get_biais() const {
     return biais;
+}
+
+const Matrix& DenseLayer::get_gradWeight() const {
+    return gradWeight;
+}
+
+const Matrix &DenseLayer::get_gradBiais() const {
+    return gradBiais;
 }
 
 

@@ -10,6 +10,7 @@ class DenseLayer : public Layer {
 public:
     DenseLayer(Index nInput,Index nOutput, Random &gen, Index initChoice=0);
     Matrix forward(Matrix const &in) override;
+    Matrix backward(Matrix const &gradientOut) override;
     Index nInput() const override;
     Index nOutput() const override;
 
@@ -17,10 +18,14 @@ public:
     void set_biais(Matrix const &b);
     const Matrix& get_weight() const;
     const Matrix& get_biais() const;
+    const Matrix& get_gradWeight() const;
+    const Matrix& get_gradBiais() const;
 private:
     Matrix weight;
     Matrix biais;
     Matrix inNeural;
+    Matrix gradWeight;
+    Matrix gradBiais;
 };
 
 #endif //RESEAU_DE_NEURONES_FROM_SCRATCH_C_DENSELAYER_HPP

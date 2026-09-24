@@ -20,3 +20,14 @@ Matrix ActivationLayer::forward(Matrix const &in) {
     }
     return result;
 }
+
+Matrix ActivationLayer::backward(Matrix const &gradientOut) {
+    assert(gradientOut.get_column() == input.get_column() && gradientOut.get_row() == input.get_row() && "Dimension de la matrice des gradients ne correspond pas au nombre de neurones de la couche précédente");
+    Matrix gradient_activation_fn(input.get_row(), input.get_column(),0);
+    for (Index i = 0; i < input.get_row(); i++) {
+        for (Index j = 0; j < input.get_column(); j++) {
+            gradient_activation_fn.get_value(i,j) = derivate_fn(input.get_value(i,j));
+        }
+    }
+    return hadamard(gradientOut,gradient_activation_fn);
+}
