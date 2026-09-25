@@ -280,7 +280,7 @@ void test_network(TestRunner &runner) {
     input_xor_4x2.get_value(3, 0) = 1;
     input_xor_4x2.get_value(3, 1) = 1;
 
-    Matrix out_4x2 = net.prediction(input_xor_4x2);
+    Matrix out_4x2 = net.forward(input_xor_4x2);
 
     runner.check_values(4, out_4x2.get_row(), "Lignes de la sortie pour entree 4x2");
     runner.check_values(1, out_4x2.get_column(), "Colonnes de la sortie pour entree 4x2");
@@ -291,7 +291,7 @@ void test_network(TestRunner &runner) {
     input_xor_1x2.get_value(0, 0) = 1;
     input_xor_1x2.get_value(0, 1) = 0;
 
-    Matrix out_1x2 = net.prediction(input_xor_1x2);
+    Matrix out_1x2 = net.forward(input_xor_1x2);
 
     runner.check_values(1, out_1x2.get_row(), "Lignes de la sortie pour entree 1x2");
     runner.check_values(1, out_1x2.get_column(), "Colonnes de la sortie pour entree 1x2");
@@ -367,7 +367,7 @@ void test_network(TestRunner &runner) {
 
     net_coh.add(std::make_unique<Sigmoide>(1));
 
-    Matrix out_net = net_coh.prediction(input_coherence);
+    Matrix out_net = net_coh.forward(input_coherence);
 
     // --- 3. Comparaison ---
     comparaison_matrix(runner, out_net, expected_coh, "Coherence Reseau vs Manuel");

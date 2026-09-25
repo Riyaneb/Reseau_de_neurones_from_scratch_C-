@@ -10,7 +10,9 @@
 class Network {
 public:
     void add(std::unique_ptr<Layer>);
-    Matrix prediction(Matrix const &X);
+    Matrix forward(Matrix const &X);
+    Matrix backward(Matrix const &gradLoss);
+
 private:
     std::vector<std::unique_ptr<Layer>> layers;
 };

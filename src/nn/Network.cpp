@@ -9,7 +9,7 @@ void Network::add(std::unique_ptr<Layer> layer) {
     layers.push_back(std::move(layer));
 }
 
-Matrix Network::prediction(Matrix const &X) {
+Matrix Network::forward(Matrix const &X) {
     assert(!layers.empty() && "Erreur : Le réseau est vide");
     assert(X.get_column() == layers[0]->nInput() && "Erreur : Dimension de l'entrée incorrecte pour ce réseau");
     Matrix result = X;
@@ -19,3 +19,16 @@ Matrix Network::prediction(Matrix const &X) {
     }
     return result;
 }
+
+Matrix Network::backward(Matrix const &gradLoss) {
+    assert(!layers.empty() && "Erreur : Le réseau est vide");
+    assert(layers.back()->nOutput() == gradLoss.get_column() && "Erreur : Dimension de sortie incorrecte pour ce réseau");
+    Matrix result = gradLoss;
+    std::vector<std::unique_ptr<Layer>>::reverse_iterator it;
+    for (it = layers.rbegin(); it != layers.rend(); ++it) {
+        result = (*it)->backward(result);
+    }
+    return result;
+}
+
+

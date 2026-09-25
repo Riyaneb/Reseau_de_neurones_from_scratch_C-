@@ -13,6 +13,9 @@ void test_layer(TestRunner& runner);
 
 void test_loss(TestRunner &runner);
 void test_backward(TestRunner &runner);
+void test_gradient_check_network(TestRunner &runner);
+void test_gradient_check_complet(TestRunner &runner);
+
 
 int main() {
     TestRunner runner;
@@ -22,6 +25,8 @@ int main() {
     test_layer(runner);
     test_loss(runner);
     test_backward(runner);
+    test_gradient_check_network(runner);
+    test_gradient_check_complet(runner);
     runner.bilan();
     return runner.return_test();
 }
