@@ -12,6 +12,8 @@ public:
     void add(std::unique_ptr<Layer>);
     Matrix forward(Matrix const &X);
     Matrix backward(Matrix const &gradLoss);
+    PairParameters get_parameters();
+    void set_gradients_zero();
 
 private:
     std::vector<std::unique_ptr<Layer>> layers;

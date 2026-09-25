@@ -59,4 +59,29 @@ const Matrix &DenseLayer::get_gradBiais() const {
     return gradBiais;
 }
 
+void DenseLayer::set_gradients_zero() {
+    gradWeight = Matrix(gradWeight.get_row(),gradWeight.get_column(),0);
+    gradBiais = Matrix(gradBiais.get_row(),gradBiais.get_column(),0);
+}
+
+PairParameters DenseLayer::get_parameters() {
+    PairParameters params;
+    std::pair<Matrix*, Matrix*> pair_weight;
+    std::pair<Matrix*, Matrix*> pair_biais;
+
+    pair_weight.first = &weight;
+    pair_weight.second = &gradWeight;
+
+    pair_biais.first = &biais;
+    pair_biais.second = &gradBiais;
+
+    params.push_back(pair_weight);
+    params.push_back(pair_biais);
+
+    return params;
+}
+
+
+
+
 

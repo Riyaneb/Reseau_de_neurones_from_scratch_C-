@@ -32,3 +32,24 @@ Matrix Network::backward(Matrix const &gradLoss) {
 }
 
 
+PairParameters Network::get_parameters() {
+    assert(!layers.empty() && "Erreur : Le réseau est vide");
+    PairParameters parameters;
+    std::vector<std::unique_ptr<Layer>>::iterator it;
+    for (it = layers.begin(); it != layers.end(); ++it) {
+        PairParameters::iterator it2;
+        PairParameters temp = (*it)->get_parameters();
+        for (it2 = temp.begin(); it2 != temp.end(); ++it2) {
+            parameters.push_back(*it2);
+        }
+    }
+    return parameters;
+}
+
+void Network::set_gradients_zero() {
+    assert(!layers.empty() && "Erreur : Le réseau est vide");
+    std::vector<std::unique_ptr<Layer>>::iterator it;
+    for (it = layers.begin(); it != layers.end(); ++it) {
+        (*it)->set_gradients_zero();
+    }
+}

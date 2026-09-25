@@ -13,6 +13,8 @@ public:
     Matrix backward(Matrix const &gradientOut) override;
     Index nInput() const override;
     Index nOutput() const override;
+    PairParameters get_parameters() override;
+    void set_gradients_zero() override;
 
     void set_weight(Matrix const &w);
     void set_biais(Matrix const &b);
