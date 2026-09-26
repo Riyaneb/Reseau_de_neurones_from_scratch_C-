@@ -2,6 +2,7 @@
 #define RESEAU_DE_NEURONES_FROM_SCRATCH_C_LAYER_HPP
 
 #include "math/Matrix.hpp"
+#include <memory>
 
 class Layer {
 public:
@@ -12,6 +13,7 @@ public:
     virtual Index nOutput() const = 0;
     virtual PairParameters get_parameters();
     virtual void set_gradients_zero();
+    virtual std::unique_ptr<Layer> clone() const = 0;
 };
 
 #endif //RESEAU_DE_NEURONES_FROM_SCRATCH_C_LAYER_HPP

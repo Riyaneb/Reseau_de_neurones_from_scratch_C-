@@ -7,6 +7,9 @@
 #include "nn/Optimizers.hpp"
 #include <sstream>
 
+void save(Network &net, std::string const &filename);
+void load(Network &net, std::string const &filename);
+
 void comparaison_matrix(Matrix const &result, Matrix const &expected, std::string const &nom) {
 
     std::ostringstream matExpectedStr;
@@ -27,7 +30,6 @@ void comparaison_matrix(Matrix const &result, Matrix const &expected, std::strin
 }
 
 int main() {
-    const Scalar taux = 0.5;
 
     Matrix input_xor(4, 2);
     input_xor.get_value(0, 0) = 0.0;
@@ -50,7 +52,7 @@ int main() {
 
     Random gen(33);
     QuadraLoss fn_loss;
-    SGD optimizer(taux);
+    // SGD optimizer(taux);
 
     Network net;
 
@@ -65,7 +67,7 @@ int main() {
     const Index EPOCH = 5000;
 
     PairParameters parameters = net.get_parameters();
-
+    Adam optimizer2(parameters,0.01);
     for (Index i = 0; i < EPOCH; i++) {
         net.set_gradients_zero();
         Matrix pred = net.forward(input_xor);
@@ -74,11 +76,13 @@ int main() {
             std::cout <<"Erreur à l'epoch "<< i <<": "<< error << std::endl;
         }
         net.backward(fn_loss.calculate_gradients_loss(pred, target_xor));
-        optimizer.update_parameters(parameters);
+        optimizer2.update_parameters(parameters);
     }
 
     Matrix pred = net.forward(input_xor);
     comparaison_matrix(pred, target_xor, "Test reseau xor");
 
     std::cout <<"Perte finale : "<< fn_loss.calculate_loss(pred,target_xor) << std::endl;
+
+    save(net, "models/reseau_xor.txt");
 }

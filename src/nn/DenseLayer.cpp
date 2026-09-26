@@ -81,7 +81,9 @@ PairParameters DenseLayer::get_parameters() {
     return params;
 }
 
-
+std::unique_ptr<Layer> DenseLayer::clone() const {
+    return std::make_unique<DenseLayer>(*this);
+}
 
 
 

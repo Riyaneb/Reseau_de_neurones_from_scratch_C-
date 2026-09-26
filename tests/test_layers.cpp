@@ -5,6 +5,10 @@
 #include "nn/Activations.hpp"
 #include "nn/Network.hpp"
 #include <memory>
+#include <iostream>
+#include "nn/Losses.hpp"
+#include "nn/Optimizers.hpp"
+#include <sstream>
 
 
 void comparaison_matrix(TestRunner &runner, Matrix const &result, Matrix const &expected, std::string const &nom);
@@ -372,6 +376,73 @@ void test_network(TestRunner &runner) {
     // --- 3. Comparaison ---
     comparaison_matrix(runner, out_net, expected_coh, "Coherence Reseau vs Manuel");
 }
+
+void test_clone(TestRunner& runner) {
+    Random gen(42);
+    Network net;
+
+    auto ptrDense1 = std::make_unique<DenseLayer>(2, 2, gen);
+    DenseLayer* dense1 = ptrDense1.get();
+
+
+    Matrix w1(2, 2);
+    w1.get_value(0, 0) = 1.0; w1.get_value(0, 1) = 0.0;
+    w1.get_value(1, 0) = 0.0; w1.get_value(1, 1) = 1.0;
+    dense1->set_weight(w1);
+
+    Matrix b1(1, 2);
+    b1.get_value(0, 0) = 1.0; b1.get_value(0, 1) = -1.0;
+    dense1->set_biais(b1);
+
+    net.add(std::move(ptrDense1));
+
+    net.add(std::make_unique<ReLU>(2));
+
+
+    auto ptrDense2 = std::make_unique<DenseLayer>(2, 1, gen);
+    DenseLayer* dense2 = ptrDense2.get();
+
+    Matrix w2(2, 1);
+    w2.get_value(0, 0) = 2.0;
+    w2.get_value(1, 0) = 2.0;
+    dense2->set_weight(w2);
+
+
+    Matrix b2(1, 1);
+    b2.get_value(0, 0) = -1.0;
+    dense2->set_biais(b2);
+
+    net.add(std::move(ptrDense2));
+
+    net.add(std::make_unique<ReLU>(1));
+
+    Network clone_network = net.clone();
+
+    Matrix input(1, 2);
+    input.get_value(0, 0) = 1.0;
+    input.get_value(0, 1) = 1.0;
+
+
+    Matrix output_original = net.forward(input);
+
+    Matrix output_clone = clone_network.forward(input);
+
+    runner.section("Test clonage réseau");
+    comparaison_matrix(runner, output_clone, output_original, "Correspondance des resultats avant modification");
+
+    runner.section("Test independance du clone");
+
+    Matrix w1_modifiee(2, 2);
+    w1_modifiee.get_value(0, 0) = 0.0; w1_modifiee.get_value(0, 1) = 0.0;
+    w1_modifiee.get_value(1, 0) = 0.0; w1_modifiee.get_value(1, 1) = 0.0;
+    dense1->set_weight(w1_modifiee);
+
+
+    Matrix output_clone_change = clone_network.forward(input);
+
+    comparaison_matrix(runner, output_clone_change, output_original, "Le clone reste intact apres modification de l'original");
+}
+
 void test_layer(TestRunner& runner) {
 
     runner.section("Test de la classe DenseLayer");
@@ -386,3 +457,4 @@ void test_layer(TestRunner& runner) {
     runner.section("Test Network");
     test_network(runner);
 }
+

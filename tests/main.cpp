@@ -16,6 +16,7 @@ void test_backward(TestRunner &runner);
 void test_gradient_check_network(TestRunner &runner);
 void test_gradient_check_complet(TestRunner &runner);
 
+void test_clone(TestRunner& runner);
 
 int main() {
     TestRunner runner;
@@ -27,6 +28,7 @@ int main() {
     test_backward(runner);
     test_gradient_check_network(runner);
     test_gradient_check_complet(runner);
+    test_clone(runner);
     runner.bilan();
     return runner.return_test();
 }

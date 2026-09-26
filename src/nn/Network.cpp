@@ -53,3 +53,12 @@ void Network::set_gradients_zero() {
         (*it)->set_gradients_zero();
     }
 }
+
+Network Network::clone() const {
+    Network net;
+    std::vector<std::unique_ptr<Layer>>::const_iterator it;
+    for (it = layers.begin(); it != layers.end(); ++it) {
+        net.add((*it)->clone());
+    }
+    return net;
+}

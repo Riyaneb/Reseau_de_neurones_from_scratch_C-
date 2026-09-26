@@ -5,7 +5,7 @@
 class Optimizer {
 public :
     virtual ~Optimizer() {}
-    virtual void update_parameters(PairParameters &parameters) const = 0;
+    virtual void update_parameters(PairParameters &parameters) = 0;
 };
 
 

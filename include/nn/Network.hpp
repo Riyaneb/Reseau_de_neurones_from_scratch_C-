@@ -14,6 +14,7 @@ public:
     Matrix backward(Matrix const &gradLoss);
     PairParameters get_parameters();
     void set_gradients_zero();
+    Network clone() const;
 
 private:
     std::vector<std::unique_ptr<Layer>> layers;

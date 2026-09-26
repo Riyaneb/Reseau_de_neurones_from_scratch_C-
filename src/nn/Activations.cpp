@@ -19,6 +19,10 @@ Scalar ReLU::derivate_fn(Scalar const &value) const {
     }
 }
 
+std::unique_ptr<Layer> ReLU::clone() const {
+    return std::make_unique<ReLU>(*this);
+}
+
 Scalar Sigmoide::apply(Scalar value) const {
     return 1.0/(1.0 + std::exp(-value));
 }
@@ -26,6 +30,10 @@ Scalar Sigmoide::apply(Scalar value) const {
 Scalar Sigmoide::derivate_fn(Scalar const &value) const {
     Scalar temp = Sigmoide::apply(value);
     return temp * (1.0 - temp);
+}
+
+std::unique_ptr<Layer> Sigmoide::clone() const {
+    return std::make_unique<Sigmoide>(*this);
 }
 
 Scalar Tanh::apply(Scalar value) const {
@@ -36,6 +44,10 @@ Scalar Tanh::derivate_fn(Scalar const &value) const {
     return 1.0 - pow(std::tanh(value),2);
 }
 
+std::unique_ptr<Layer> Tanh::clone() const {
+    return std::make_unique<Tanh>(*this);
+}
+
 Scalar Identity::apply(Scalar value) const {
     return value;
 }
@@ -44,4 +56,8 @@ Scalar Identity::derivate_fn(Scalar const &value) const {
     if (value <= 0) {
     }
     return 1;
+}
+
+std::unique_ptr<Layer> Identity::clone() const {
+    return std::make_unique<Identity>(*this);
 }
