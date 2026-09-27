@@ -27,7 +27,7 @@ void CorridorEnv::render() const {
             std::cout << ".";
         }
     }
-    std::cout << std::endl;
+    std::cout << std::endl << std::endl;
 }
 
 StepResult CorridorEnv::step(Index action) {

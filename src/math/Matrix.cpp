@@ -1,5 +1,6 @@
 #include "math/Matrix.hpp"
 #include <cassert>
+#include <iostream>
 
 Index Matrix::check_size(Index l, Index c) {
     assert(l > 0 && c >0 && "Le nombre de ligne ou de colonne de la matrice est négatif ou nulle");
@@ -150,4 +151,31 @@ Matrix Matrix::matIdentity(Index n) {
         result.get_value(j,j) = 1.0;
     }
     return result;
+}
+
+void Matrix::render() {
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < column; j++) {
+            std::cout << this->get_value(i,j) << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+Index Matrix::max_index_value_row(Index r) const {
+    assert(r >= 0 && r < row && "Erreur : La ligne est invalide");
+    Index max_index = 0;
+    Scalar max_value = this->get_value(r,0);
+    for (Index i = 0; i < column; ++i) {
+        Scalar temp = this->get_value(r,i);
+        if (temp > max_value) {
+            max_value = temp;
+            max_index = i;
+        }
+    }
+    return max_index;
+}
+
+Scalar Matrix::max_value_row(Index r) const {
+    return this->get_value(r,max_index_value_row(r));
 }

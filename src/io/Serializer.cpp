@@ -1,10 +1,4 @@
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <limits>
-#include <iomanip>
-#include "nn/Network.hpp"
-#include "nn/DenseLayer.hpp"
+#include "io/Serializer.hpp"
 
 void save(Network &net, std::string const &filename) {
     std::ofstream f(filename.c_str());

@@ -20,6 +20,9 @@ public:
     Matrix& broadcast(Matrix const &m);
     Matrix sum_row() const;
     static Matrix matIdentity(Index i);
+    void render();
+    Index max_index_value_row(Index r) const;
+    Scalar max_value_row(Index r) const;
 
 private:
     static Index check_size(Index l, Index c);

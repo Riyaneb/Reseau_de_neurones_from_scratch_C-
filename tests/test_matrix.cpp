@@ -313,6 +313,40 @@ void test_transpose_produit(TestRunner &runner) {
     comparaison_matrix(runner, B, copieB, "Test intégrité propriete de B");
 }
 
+void test_max_value_row(TestRunner &runner) {
+    Matrix test_matrix(4, 3);
+
+    test_matrix.get_value(0, 0) = 1.0;
+    test_matrix.get_value(0, 1) = 5.0;
+    test_matrix.get_value(0, 2) = 3.0;
+
+    test_matrix.get_value(1, 0) = 7.0;
+    test_matrix.get_value(1, 1) = 2.0;
+    test_matrix.get_value(1, 2) = 4.0;
+
+    test_matrix.get_value(2, 0) = 2.0;
+    test_matrix.get_value(2, 1) = 4.0;
+    test_matrix.get_value(2, 2) = 8.0;
+
+    test_matrix.get_value(3, 0) = 6.0;
+    test_matrix.get_value(3, 1) = 6.0;
+    test_matrix.get_value(3, 2) = 1.0;
+
+    runner.section("Test des méthodes max_index_value_row et max_value_row");
+
+    runner.check_values(1,test_matrix.max_index_value_row(0),"Test max_index_value_row sur la ligne 0");
+    runner.check_values(5.0,test_matrix.max_value_row(0),"Test max_value_row sur la ligne 0");
+
+    runner.check_values(0,test_matrix.max_index_value_row(1),"Test max_index_value_row sur la ligne 1");
+    runner.check_values(7.0,test_matrix.max_value_row(1),"Test max_value_row sur la ligne 1");
+
+    runner.check_values(2,test_matrix.max_index_value_row(2),"Test max_index_value_row sur la ligne 2");
+    runner.check_values(8.0,test_matrix.max_value_row(2),"Test max_value_row sur la ligne 2");
+
+    runner.check_values(0,test_matrix.max_index_value_row(3),"Test max_index_value_row sur la ligne 3");
+    runner.check_values(6.0,test_matrix.max_value_row(3),"Test max_value_row sur la ligne 3");
+}
+
 void test_matrice(TestRunner& runner) {
     Scalar const n1 = 7.0;
     Matrix matriceA(3,2,n1);

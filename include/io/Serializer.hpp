@@ -1,8 +1,15 @@
-//
-// Created by riyan on 9/15/26.
-//
-
 #ifndef RESEAU_DE_NEURONES_FROM_SCRATCH_C_SERIALIZER_HPP
 #define RESEAU_DE_NEURONES_FROM_SCRATCH_C_SERIALIZER_HPP
+
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <limits>
+#include <iomanip>
+#include "nn/Network.hpp"
+#include "nn/DenseLayer.hpp"
+
+void save(Network &net, std::string const &filename);
+void load(Network &net, std::string const &filename);
 
 #endif //RESEAU_DE_NEURONES_FROM_SCRATCH_C_SERIALIZER_HPP
