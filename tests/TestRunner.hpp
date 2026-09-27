@@ -39,6 +39,13 @@ public:
         }
     }
 
+    void check_values(bool value_expected, bool value_obtained, std::string const &name) {
+        bool succes(value_expected == value_obtained);
+        check_test(succes, name);
+        if (!succes) {
+            std::cout << "attendu " << value_expected << ", obtenu : " << value_obtained << std::endl;
+        }
+    }
 
     void section(std::string const &name) const {
         std::cout << std::endl << "======" << name << "======" << std::endl;

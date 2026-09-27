@@ -18,6 +18,10 @@ void test_gradient_check_complet(TestRunner &runner);
 
 void test_clone(TestRunner& runner);
 
+void test_corridor(TestRunner &runner);
+
+void test_replay_buffer(TestRunner &runner);
+
 int main() {
     TestRunner runner;
     test_matrice(runner);
@@ -29,6 +33,8 @@ int main() {
     test_gradient_check_network(runner);
     test_gradient_check_complet(runner);
     test_clone(runner);
+    test_corridor(runner);
+    test_replay_buffer(runner);
     runner.bilan();
     return runner.return_test();
 }
