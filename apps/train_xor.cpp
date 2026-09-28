@@ -7,27 +7,9 @@
 #include "nn/Optimizers.hpp"
 #include <sstream>
 
-void save(Network &net, std::string const &filename);
-void load(Network &net, std::string const &filename);
+#include "io/Serializer.hpp"
+#include "utils/Logger.hpp"
 
-void comparaison_matrix(Matrix const &result, Matrix const &expected, std::string const &nom) {
-
-    std::ostringstream matExpectedStr;
-    std::ostringstream matResultStr;
-
-    for (Index i = 0; i < expected.get_row(); i++) {
-        for (Index j = 0; j < expected.get_column(); j++) {
-            std::ostringstream casee;
-            casee << nom << " cellule (" << i << "," << j << ")";
-            matExpectedStr << expected.get_value(i,j) << " ";
-            matResultStr<< result.get_value(i,j) << " ";
-        }
-        matExpectedStr << std::endl;
-        matResultStr << std::endl;
-    }
-
-    std::cout << "Matrice attendu :\n\n" << matExpectedStr.str() << "\n\nMatrice obtenu :\n\n" << matResultStr.str() << std::endl;
-}
 
 int main() {
 

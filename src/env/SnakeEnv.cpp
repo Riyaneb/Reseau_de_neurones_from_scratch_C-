@@ -175,14 +175,14 @@ void SnakeEnv::render() const {
         std::cout << std::endl << "#";
         for (Index i = 0; i < grid_size; i++) {
             if (food == Point(i,j)) {
-                std::cout << "O";
+                std::cout << "\033[31m*\033[0m";
             }
             else if (is_in_snake(snake,Point(i,j))) {
                 if (Point(i,j) == snake[0]) {
-                    std::cout << "X";
+                    std::cout << "\033[92m@\033[0m";
                 }
                 else {
-                    std::cout << "x";
+                    std::cout << "\033[32mo\033[0m";
                 }
             }
             else {
@@ -195,4 +195,5 @@ void SnakeEnv::render() const {
     for (Index i = 0; i < grid_size+2; i++) {
         std::cout << "#";
     }
+    std::cout << "\n Score : " << score << "\n\n" << std::endl;
 }

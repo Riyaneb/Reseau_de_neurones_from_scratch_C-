@@ -11,18 +11,33 @@
 #include "nn/DenseLayer.hpp"
 #include "nn/Activations.hpp"
 
+struct ConfigurationAgent {
+    std::uint32_t seed = 0;
+    Index amount_neural = 64;
+    Scalar value_gamma = 0.95;
+    Index value_size_batch = 64;
+    Index value_min_amount_transition = 2000;
+    Index value_update_intervale = 1000;
+    Index buffer_size = 50000;
+    Scalar learning_rate = 0.0005;
+};
+
+
 class DQNAgent {
 public:
-    DQNAgent(Index size_observation, Index am_action, std::uint32_t seed = 0, Index amount_neural = 64, Scalar value_gamma = 0.95, Index value_size_batch = 32, Index value_min_amount_transition = 500, Index value_update_intervale = 200, Index buffer_size = 10000, Scalar learning_rate = 0.001);
+    DQNAgent(Index size_observation, Index am_action, ConfigurationAgent configuration);
     Index choice_action(Matrix const &observation);
+    Index choice_action_test(Matrix const &observation);
     void add_buffer(Transition const &transition);
     void sync_target();
     void learn();
+    void load_network(std::string const &nom);
 
-    Scalar get_loss();
-    Scalar actual_epsilon();
-    Index get_size_buffer();
-    Index get_step_count();
+    Scalar get_loss() const;
+    Scalar actual_epsilon() const;
+    Index get_size_buffer() const;
+    Index get_step_count() const;
+    Network get_network();
 private:
     Random gen;
     Index amount_observation;

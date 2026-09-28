@@ -4,10 +4,6 @@
 
 using namespace std;
 
-void bench() {
-
-}
-
 int main() {
     Matrix A(600,600);
     Matrix B(600,600);

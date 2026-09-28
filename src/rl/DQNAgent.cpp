@@ -1,18 +1,20 @@
 #include "rl/DQNAgent.hpp"
 
-DQNAgent::DQNAgent(Index size_observation, Index am_action, std::uint32_t seed, Index amount_neural, Scalar value_gamma, Index value_size_batch, Index value_min_amount_transition, Index value_update_intervale, Index buffer_size, Scalar learning_rate)
-: gen(seed), amount_observation(size_observation), amount_action(am_action), replay_buffer(buffer_size,seed), step_count(0), gamma(value_gamma), size_batch(value_size_batch), min_amount_transition(value_min_amount_transition), target_update_interval(value_update_intervale), loss_value(0)
-{
-    auto ptrDense1 = std::make_unique<DenseLayer>(size_observation, amount_neural, gen, 1);
-    main_network.add(std::move(ptrDense1));
-    main_network.add(std::make_unique<ReLU>(amount_neural));
+#include "io/Serializer.hpp"
 
-    auto ptrDense2 = std::make_unique<DenseLayer>(amount_neural, am_action, gen);
+DQNAgent::DQNAgent(Index size_observation, Index am_action, ConfigurationAgent configuration)
+: gen(configuration.seed), amount_observation(size_observation), amount_action(am_action), replay_buffer(configuration.buffer_size,configuration.seed), step_count(0), gamma(configuration.value_gamma), size_batch(configuration.value_size_batch), min_amount_transition(configuration.value_min_amount_transition), target_update_interval(configuration.value_update_intervale), loss_value(0)
+{
+    auto ptrDense1 = std::make_unique<DenseLayer>(size_observation, configuration.amount_neural, gen, 1);
+    main_network.add(std::move(ptrDense1));
+    main_network.add(std::make_unique<ReLU>(configuration.amount_neural));
+
+    auto ptrDense2 = std::make_unique<DenseLayer>(configuration.amount_neural, am_action, gen);
     main_network.add(std::move(ptrDense2));
     main_network.add(std::make_unique<Identity>(am_action));
 
     parameters = main_network.get_parameters();
-    optimizer = std::make_unique<Adam>(parameters , learning_rate);
+    optimizer = std::make_unique<Adam>(parameters , configuration.learning_rate);
 
     target_network = main_network.clone();
 }
@@ -29,6 +31,11 @@ Index DQNAgent::choice_action(Matrix const &observation) {
     }
 }
 
+Index DQNAgent::choice_action_test(Matrix const &observation) {
+    Matrix result = main_network.forward(observation);
+    return result.max_index_value_row(0);
+}
+
 void DQNAgent::add_buffer(Transition const &transition) {
     replay_buffer.add_transition(transition);
 }
@@ -37,20 +44,29 @@ void DQNAgent::sync_target() {
     target_network = main_network.clone();
 }
 
-Scalar DQNAgent::get_loss() {
+Scalar DQNAgent::get_loss() const {
     return loss_value;
 }
 
-Scalar DQNAgent::actual_epsilon() {
+Scalar DQNAgent::actual_epsilon() const{
     return epsilon_schedule.exponential_decay(step_count);
 }
 
-Index DQNAgent::get_size_buffer() {
+Index DQNAgent::get_size_buffer() const{
     return replay_buffer.get_size();
 }
 
-Index DQNAgent::get_step_count() {
+Index DQNAgent::get_step_count() const{
     return step_count;
+}
+
+Network DQNAgent::get_network() {
+    return main_network.clone();
+}
+
+void DQNAgent::load_network(std::string const &nom) {
+    load(main_network, nom);
+    sync_target();
 }
 
 void DQNAgent::learn() {

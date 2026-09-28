@@ -2,10 +2,7 @@
 #include <ostream>
 
 #include "env/SnakeEnv.hpp"
-
-void clear() {
-    std::cout << "\033[2J\033[H" << std::flush;
-}
+#include "utils/Logger.hpp"
 
 int main()
 {

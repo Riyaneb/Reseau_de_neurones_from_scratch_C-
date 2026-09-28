@@ -9,7 +9,7 @@
 #include "nn/Network.hpp"
 #include "nn/DenseLayer.hpp"
 
-void save(Network &net, std::string const &filename);
-void load(Network &net, std::string const &filename);
+bool save(Network &net, std::string const &filename);
+bool load(Network &net, std::string const &filename);
 
 #endif //RESEAU_DE_NEURONES_FROM_SCRATCH_C_SERIALIZER_HPP

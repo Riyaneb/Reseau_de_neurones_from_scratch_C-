@@ -1,12 +1,17 @@
 #include <iostream>
 #include <ostream>
+#include <thread>
 
 #include "env/CorridorEnv.hpp"
 #include "rl/DQNAgent.hpp"
+#include "utils/Logger.hpp"
 
 int main() {
     CorridorEnv corridor(50,500);
-    DQNAgent agent(corridor.get_observation_size(),corridor.get_action_count());
+    ConfigurationAgent config;
+    print_configuration(config);
+    delay(3000);
+    DQNAgent agent(corridor.get_observation_size(),corridor.get_action_count(),config);
     const Index EPOCH = 2000;
     for (Index i = 0; i < EPOCH; i++) {
         Scalar total_reward = 0;

@@ -1,6 +1,6 @@
 #include "io/Serializer.hpp"
 
-void save(Network &net, std::string const &filename) {
+bool save(Network &net, std::string const &filename) {
     std::ofstream f(filename.c_str());
     if (f) {
         f << std::setprecision(std::numeric_limits<Scalar>::max_digits10);
@@ -22,12 +22,13 @@ void save(Network &net, std::string const &filename) {
     }
     else {
         std::cerr << "Erreur dans la création du fichier " << filename << "\n";
-        return;
+        return false;
     }
     f.close();
+    return true;
 }
 
-void load(Network &net, std::string const &filename) {
+bool load(Network &net, std::string const &filename) {
     std::ifstream f(filename.c_str());
     if (f) {
         PairParameters params = net.get_parameters();
@@ -36,7 +37,7 @@ void load(Network &net, std::string const &filename) {
         f >> fileSize;
         if (size != fileSize) {
             std::cerr << "Erreur sur la taille du réseau de neurone";
-            return;
+            return false;
         }
         else {
             for (Index k = 0; k < size; k++) {
@@ -45,7 +46,7 @@ void load(Network &net, std::string const &filename) {
                 f >> row >> col;
                 if (row != param.get_row() || col != param.get_column()) {
                     std::cerr << "Erreur : La matrice " << k + 1 << " ne possède pas la bonne dimension" << std::endl;
-                    return;
+                    return false;
                 }
                 else {
                     Scalar temp;
@@ -61,7 +62,8 @@ void load(Network &net, std::string const &filename) {
     }
     else {
         std::cerr << "Erreur dans l'ouverture du fichier " << filename << "\n";
-        return;
+        return false;
     }
     f.close();
+    return true;
 }
