@@ -5,9 +5,9 @@
 #include "rl/DQNAgent.hpp"
 
 int main() {
-    CorridorEnv corridor(5,50);
+    CorridorEnv corridor(50,500);
     DQNAgent agent(corridor.get_observation_size(),corridor.get_action_count());
-    const Index EPOCH = 500;
+    const Index EPOCH = 2000;
     for (Index i = 0; i < EPOCH; i++) {
         Scalar total_reward = 0;
         Matrix actual_observation = corridor.reset();

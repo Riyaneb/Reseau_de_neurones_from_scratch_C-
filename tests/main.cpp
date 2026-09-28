@@ -24,6 +24,8 @@ void test_replay_buffer(TestRunner &runner);
 
 void test_max_value_row(TestRunner &runner);
 
+void test_snake_env(TestRunner &runner);
+
 int main() {
     TestRunner runner;
     test_matrice(runner);
@@ -38,6 +40,8 @@ int main() {
     test_corridor(runner);
     test_replay_buffer(runner);
     test_max_value_row(runner);
+    test_snake_env(runner) ;
+    std::cout << std::endl;
     runner.bilan();
     return runner.return_test();
 }
