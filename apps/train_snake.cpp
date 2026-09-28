@@ -8,27 +8,15 @@
 #include <fstream>
 #include <deque>
 
-void update_log(std::ofstream &log_file, std::deque<Scalar> &recent_scores, Scalar &sum_scores, Index episode, Scalar score, Scalar epsilon, Scalar loss) {
-    recent_scores.push_front(score);
-    sum_scores += score;
-
-    if (recent_scores.size() > 100) {
-        sum_scores -= recent_scores.back();
-        recent_scores.pop_back();
-    }
-
-    Scalar rolling_mean = sum_scores / recent_scores.size();
-
-    if (log_file) {
-        log_file << episode << ","<< score << ","<< epsilon << ","<< loss << ","<< rolling_mean << "\n";
-    }
-}
 
 int main() {
     SnakeEnv snake(10,100);
 
     Random gen(33);
     ConfigurationAgent config;
+    config.value_gamma = 0.99;
+    config.value_update_intervale = 5000;
+    config.buffer_size = 100000;
     print_configuration(config);
 
     delay(3000);
@@ -44,7 +32,7 @@ int main() {
     Scalar sum_scores = 0.0;
 
     Scalar best_mean = -1;
-    const Index EPOCH = 3000;
+    const Index EPOCH = 8000;
 
     for (Index i = 0; i < EPOCH; i++) {
         if (i%100==0 && i>0) {

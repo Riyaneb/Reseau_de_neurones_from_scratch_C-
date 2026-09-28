@@ -7,6 +7,9 @@
 #include "env/SnakeEnv.hpp"
 #include "math/Matrix.hpp"
 
+#include <fstream>
+#include <deque>
+
 void print_configuration(ConfigurationAgent const &config) {
     std::cout << "Configuration Agent :\n";
     std::cout << "seed                        : " << config.seed << "\n";
@@ -62,4 +65,20 @@ Scalar eval_snake(DQNAgent &agent, SnakeEnv &env, Index nb_games) {
         total_score += env.get_score();
     }
     return (total_score / (Scalar)nb_games);
+}
+
+void update_log(std::ofstream &log_file, std::deque<Scalar> &recent_scores, Scalar &sum_scores, Index episode, Scalar score, Scalar epsilon, Scalar loss) {
+    recent_scores.push_front(score);
+    sum_scores += score;
+
+    if (recent_scores.size() > 100) {
+        sum_scores -= recent_scores.back();
+        recent_scores.pop_back();
+    }
+
+    Scalar rolling_mean = sum_scores / recent_scores.size();
+
+    if (log_file) {
+        log_file << episode << ","<< score << ","<< epsilon << ","<< loss << ","<< rolling_mean << "\n";
+    }
 }

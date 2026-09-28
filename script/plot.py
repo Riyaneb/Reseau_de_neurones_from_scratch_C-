@@ -12,6 +12,8 @@ df = pd.read_csv(path_csv)
 
 fig, (ax1,ax2,ax3) = plt.subplots(3, 1, figsize=(10, 12))
 
+fig.suptitle("Évolution de l'entrainement de l'agent snake en diminuant le taux d'apprentissage",fontsize=16,fontweight='bold')
+
 ax1.plot(df['episode'], df['score'], label='Score de l\'epoch', color='blue')
 ax1.plot(df['episode'], df['mean_score'], label='Moyenne_roulante du score (100 epochs)', color='red')
 ax1.set_xlabel('Epoch')
@@ -35,6 +37,7 @@ ax3.legend()
 ax3.grid(True)
 
 plt.tight_layout()
-plt.savefig('../data/plot/training_snake_log.png')
+
+plt.savefig('../data/plot/training_snake_log_learning_rate.png')
 print("Graphique sauvegardé dans le dossier plot")
 
