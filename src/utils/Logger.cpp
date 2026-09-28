@@ -3,6 +3,8 @@
 
 #include "rl/DQNAgent.hpp"
 #include <sstream>
+
+#include "env/SnakeEnv.hpp"
 #include "math/Matrix.hpp"
 
 void print_configuration(ConfigurationAgent const &config) {
@@ -46,3 +48,18 @@ void comparaison_matrix(Matrix const &result, Matrix const &expected, std::strin
     std::cout << "Matrice attendu :\n\n" << matExpectedStr.str() << "\n\nMatrice obtenu :\n\n" << matResultStr.str() << std::endl;
 }
 
+Scalar eval_snake(DQNAgent &agent, SnakeEnv &env, Index nb_games) {
+    Scalar total_score = 0;
+    for (Index i = 0 ; i < nb_games; i++) {
+        Matrix observation = env.reset();
+        bool game = true;
+        while (game) {
+            Index action = agent.choice_action_test(observation);
+            StepResult final_result = env.step(action);
+            observation = final_result.observation;
+            game = !(final_result.end_step);
+        }
+        total_score += env.get_score();
+    }
+    return (total_score / (Scalar)nb_games);
+}
