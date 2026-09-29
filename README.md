@@ -41,6 +41,10 @@ Projet personnel fait pour comprendre comment fonctionne un réseau de neurones,
 | Agent qui apprend à jouer à Snake (grille 10×10) | Score moyen sur 200 parties : 18.505 (Pommes mangées) |
 | Série de tests | 580 tests, 0 échec |
 
+Exemple de graphique représentant l'évolution de l'agent sur le jeu snake
+
+![Graphique sur l'évolution de l'agent à snake](data/plot/training_snake_log_buffer_size.png)
+
 
 ## Démonstration
 
@@ -414,4 +418,4 @@ data/              les données récoltées pendant l'entraînement
 ```
 
 
-*Riyane Bouakaz — [GitHub](https://github.com/Riyaneb) · [Kaggle](https://kaggle.com/riyanebouakaz) · [LinkedIn](https://linkedin.com/in/riyane-bouakaz)*
+*Riyane Bouakaz [GitHub](https://github.com/Riyaneb) · [Kaggle](https://kaggle.com/riyanebouakaz) · [LinkedIn](https://linkedin.com/in/riyane-bouakaz)*
